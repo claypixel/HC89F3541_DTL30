@@ -1,0 +1,79 @@
+C51 COMPILER V9.56.0.0   OS_TIME                                                           01/19/2021 11:12:37 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE OS_TIME
+OBJECT MODULE PLACED IN .\Objects\os_time.obj
+COMPILER INVOKED BY: E:\keil\keil\C51\BIN\C51.EXE ..\My_os\os_time.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\hardware\A
+                    -DC;..\hardware\debug;..\hardware\DELAY;..\hardware\Flash;..\hardware\HT1621B;..\hardware\Key;..\hardware\my_stdio;..\har
+                    -dware\OLED;..\hardware\product;..\hardware\Pwm;..\hardware\SYS;..\hardware\Timer;..\hardware\Uart;..\hardware\WDT;..\My_
+                    -os) DEBUG OBJECTEXTEND PRINT(.\Listings\os_time.lst) OBJECT(.\Objects\os_time.obj)
+
+line level    source
+
+   1          #include "os_time.h"
+   2          #include "sys.h"
+   3          #include "lcd_display.h"
+   4          //时间片消息驱动模式
+   5          
+   6          //u16 TaskCount[TASK_NUM];
+   7          //u8  TaskMark[TASK_NUM];
+   8          
+   9          
+  10          
+  11          static TASK_COMPONMENT_st TaskComps[] =
+  12          {
+  13              {0, 50, 50, temperature_handle},   //温度处理任务 
+  14              {0, 1, 1, key_handle},             //按键扫描任务
+  15              {0, 100, 100, Time_Count_Process}, //定时处理任务 
+  16              {0, 10, 10, display_process},      //显示函数任务
+  17              {0, 2, 2, Led_Process},            //LED显示任务
+  18          };
+  19          
+  20          void TaskRemarks(void) //定时器和中断服务函数中调用
+  21          {
+  22   1          u8 i = 0;
+  23   1          for (i = 0; i < TASK_NUM; i++)
+  24   1          {
+  25   2              if (TaskComps[i].timer)
+  26   2              {
+  27   3                  TaskComps[i].timer--;
+  28   3                  if (TaskComps[i].timer == 0)
+  29   3                  {
+  30   4                      TaskComps[i].timer = TaskComps[i].ltvtimer;
+  31   4                      TaskComps[i].running = Ture;
+  32   4                  }
+  33   3              }
+  34   2          }
+  35   1      }
+  36          
+  37          
+  38          void TaskProcess(void)
+  39          {
+  40   1          u8 i = 0;
+  41   1          for (i = 0; i < TASK_NUM; i++)
+  42   1          {
+  43   2              if (TaskComps[i].running)
+  44   2              {
+  45   3                  TaskComps[i].callback;
+*** WARNING C275 IN LINE 45 OF ..\My_os\os_time.c: expression with possibly no effect
+  46   3                  TaskComps[i].running = False;
+  47   3              }
+  48   2          }
+  49   1      }
+  50          
+
+C51 COMPILER V9.56.0.0   OS_TIME                                                           01/19/2021 11:12:37 PAGE 2   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    149    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     30    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

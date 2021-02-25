@@ -1,0 +1,16 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\adc.obj",
+".\Objects\delay.obj",
+".\Objects\flash.obj",
+".\Objects\ht1621b.obj",
+".\Objects\lcd_display.obj",
+".\Objects\key.obj",
+".\Objects\product.obj",
+".\Objects\pwm.obj",
+".\Objects\sys.obj",
+".\Objects\timer.obj",
+".\Objects\uart.obj",
+".\Objects\wdt.obj" 
+TO ".\Objects\K9029_hex" 
+PRINT(".\Listings\K9029_hex.m51") RAMSIZE(256) 
